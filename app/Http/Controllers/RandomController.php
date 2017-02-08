@@ -58,7 +58,7 @@ class RandomController extends Controller
             // make sure the user did not include a card_rarity constraint, because that would invalidate the point
             // of the rarity probability system
             if (array_key_exists('card_rarity', $input) || array_key_exists('set_rarity', $input)) {
-                return response("Cannot specify a card rarity constraint when choosing random probabilities!", 400);
+                return response(["error" => "Cannot specify a card rarity constraint when choosing random probabilities!"], 400);
             }
 
             // array initialization
@@ -78,7 +78,7 @@ class RandomController extends Controller
                         $temp = floatval($rarityValue);
                         $total = $total + $temp;
                     } else {
-                        return response("Invalid probabilities given. Make sure the probability value is numeric and between 0 to 1 (as a decimal).", 400);
+                        return response(["error" => "Invalid probabilities given. Make sure the probability value is numeric and between 0 to 1 (as a decimal)."], 400);
                     }
                     $raritiesCumulative[$i] = $total;
                 }
@@ -86,7 +86,7 @@ class RandomController extends Controller
 
             // make sure probabilities sum up to 1
             if ($total != 1) {
-                return response("Invalid probabilities given. The sum of all probabilities must equal 1.00.", 499);
+                return response(["error" => "Invalid probabilities given. The sum of all probabilities must equal 1.00."], 400);
             }
 
             // inner loop to go through all rarities and get cards from them
@@ -97,7 +97,7 @@ class RandomController extends Controller
 
                 // make sure the response given was OK (200-299 inclusive)
                 if ($response->status() < 200 || $response->status() > 299) {
-                    return response("Invalid response was returned. The error was: " . $response->getOriginalContent(), 500);
+                    return response(["error" => "Invalid response was returned. The error was: " . $response->getOriginalContent()], 500);
                 }
 
                 // get the cards, and make sure its not empty
@@ -123,12 +123,12 @@ class RandomController extends Controller
             } else if ($random >= $raritiesCumulative[5] && $random <= $raritiesCumulative[6] && $raritiesCumulative[5] != $raritiesCumulative[6]) {
                 $cards = $listOfCards[6];
             } else {
-                return response("An error occurred while processing probabilities.", 400);
+                return response(["error" => "An error occurred while processing probabilities."], 400);
             }
 
             // make sure that the chosen cards list is not empty
             if (count($cards) < 1) {
-                return response("No cards were returned. Try different constraints.", 400);
+                return response(["error" => "No cards were returned. Try different constraints."], 400);
             }
             $randomCard = $cards[mt_rand(0, count($cards) - 1)];
 
@@ -144,19 +144,19 @@ class RandomController extends Controller
 
             // make sure the response given was OK (200-299 inclusive)
             if ($response->status() < 200 || $response->status() > 299) {
-                return response("Invalid response was returned. The error was: " . $response->getOriginalContent(), 500);
+                return response(["error" => "Invalid response was returned. The error was: " . $response->getOriginalContent()], 500);
             }
 
             // get the cards, and make sure its not empty
             $cards = $response->getOriginalContent();
 
             if (count($cards) < 1) {
-                return response("No cards were returned. Try different constraints.", 400);
+                return response(["error" => "No cards were returned. Try different constraints."], 400);
             }
             $randomCard = $cards[mt_rand(0, count($cards) - 1)];
 
         } else {
-            return response("Invalid probabilities given. Either include no probabilities, or probabilities of all rarities from N to UR.", 400);
+            return response(["error" => "Invalid probabilities given. Either include no probabilities, or probabilities of all rarities from N to UR."], 400);
         }
 
         // return the random card
@@ -166,14 +166,14 @@ class RandomController extends Controller
             $input = $request->all();
             if (array_key_exists('size', $input)) {
                 if (!is_numeric($input['size'])) {
-                    return response("Size must be a numerical value.", 400);
+                    return response(["error" => "Size must be a numerical value."], 400);
                 }
                 $size = intval($input['size']);
                 return Image::make(public_path() . $strURL)->resize($size, null, function($constraint){$constraint->aspectRatio();})->response('png')->header("Card_Number", $randomCard->card_id);
             }
             return Image::make(public_path() . $strURL)->response('png')->header("Card_Number", $randomCard->card_id);
         }
-        return response("An error occurred.", 500);
+        return response(["error" => "An error occurred."], 500);
     }
 
 }

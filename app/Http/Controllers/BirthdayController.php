@@ -113,14 +113,14 @@ class BirthdayController extends Controller
             $input = $request->all();
             if (array_key_exists('size', $input)) {
                 if (!is_numeric($input['size'])) {
-                    return response("Size must be a numerical value.", 400);
+                    return response(["error" => "Size must be a numerical value."], 400);
                 }
                 $size = intval($input['size']);
                 return Image::make(public_path() . $strURL)->resize($size, null, function($constraint){$constraint->aspectRatio();})->response('png');
             }
             return Image::make(public_path() . $strURL)->response('png');
         }
-        return response("An error occurred.", 500);
+        return response(["error" => "An error occurred."], 500);
     }
 
     /**
@@ -164,13 +164,13 @@ class BirthdayController extends Controller
 
         // make sure the response given was OK (200-299 inclusive)
         if ($response->status() < 200 || $response->status() > 299) {
-            return response("Invalid response was returned. The error was: " . $response->getOriginalContent(), 500);
+            return response(["error" => "Invalid response was returned. The error was: " . $response->getOriginalContent()], 500);
         }
 
         // get the cards, and make sure its not empty
         $cards = $response->getOriginalContent();
         if (count($cards) < 1) {
-            return response("No cards were returned. Try different rarity constraints.", 400);
+            return response(["error" => "No cards were returned. Try different rarity constraints.", 400]);
         }
 
         // pick a random card, then display the card image
@@ -181,14 +181,14 @@ class BirthdayController extends Controller
             $input = $request->all();
             if (array_key_exists('size', $input)) {
                 if (!is_numeric($input['size'])) {
-                    return response("Size must be a numerical value.", 400);
+                    return response(["error" => "Size must be a numerical value."], 400);
                 }
                 $size = intval($input['size']);
                 return Image::make(public_path() . $strURL)->resize($size, null, function($constraint){$constraint->aspectRatio();})->response('png');
             }
             return Image::make(public_path() . $strURL)->response('png');
         }
-        return response("An error occurred.", 500);
+        return response(["error" => "An error occurred."], 500);
     }
 
 }

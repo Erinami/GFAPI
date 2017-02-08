@@ -260,7 +260,7 @@ class SetController extends Controller
         // check if request overwrote this value
         if (array_key_exists('items_per_page', $input)) {
             if (!is_numeric($input['items_per_page'])) {
-                return response("Items per page must be a numerical value.", 400);
+                return response(["error" => "Items per page must be a numerical value."], 400);
             }
             $items_per_page = intval($input['items_per_page']);
         }
@@ -271,11 +271,11 @@ class SetController extends Controller
         // check if user specified multiple OR tiers
         if (array_key_exists('or_tiers', $input)) {
             if (!is_numeric($input['or_tiers'])) {
-                return response("Items per page must be a numerical value.", 400);
+                return response(["error" => "Or tiers must be a numerical value."], 400);
             }
             $or_tiers = intval($input['or_tiers']);
             if ($or_tiers < 1) { // or tiers must be at least 1 - you have to have at least one tier of search criteria!
-                return response("Invalid number of or tiers.", 400);
+                return response(["error" => "Invalid number of or tiers."], 400);
             }
         }
 
@@ -294,7 +294,7 @@ class SetController extends Controller
                 if (strcmp(Helper::checkColumn($temp_sort_column), 'sets') == 0) {
                     $sort_column = Helper::checkColumn($temp_sort_column) . "." . $temp_sort_column;
                 } else {
-                    return response("Invalid sorting column given.", 400);
+                    return response(["error" => "Invalid sorting column given."], 400);
                 }
             }
         }
@@ -305,7 +305,7 @@ class SetController extends Controller
             if (strcmp('desc', $temp_sort_order) == 0) {
                 $sort_order = 'desc';
             } else if (strcmp('asc', $temp_sort_order) != 0) {
-                return response("Invalid sorting order given.", 400);
+                return response(["error" => "Invalid sorting order given."], 400);
             }
         }
 
