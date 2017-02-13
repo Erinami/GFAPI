@@ -243,6 +243,13 @@ class Helper
                         $val = strtotime($val);
                     }
 
+                    // ----------------------------------ADD PERCENT SIGN TO LIKE-------------------------------------
+
+                    // surround value with percent signs if its a like
+                    if (strcmp($op, 'LIKE') == 0) {
+                        $val = '%' . $val . '%';
+                    }
+
                     // ----------------------------------CHECK PARENT TABLE, AND JOINS--------------------------------
 
                     // check which table the column belongs to, so we can append the right table name as its prefix
