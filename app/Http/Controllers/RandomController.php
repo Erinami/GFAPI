@@ -176,4 +176,48 @@ class RandomController extends Controller
         return response(["error" => "An error occurred."], 500);
     }
 
+    /**
+     * This function calls the getRandomCard function above with predetermined probabilities that simulate the
+     * regular platinum cupid ticket in the game.
+     *
+     * If the user supplies rarity probabilities, they will be overriden. Any other request parameters will
+     * be passed onto the random function normally.
+     *
+     * @param Request $request the request sent to the server
+     * @return mixed
+     */
+    public static function regularPlatinumProbability(Request $request) {
+        // get the request parameters
+        $request->merge(['N_Probability' => 0]);
+        $request->merge(['HN_Probability' => 0]);
+        $request->merge(['R_Probability' => 0.899]);
+        $request->merge(['HR_Probability' => 0.09]);
+        $request->merge(['SR_Probability' => 0.01]);
+        $request->merge(['SSR_Probability' => 0.001]);
+        $request->merge(['UR_Probability' => 0]);
+        return RandomController::getRandomCard($request);
+    }
+
+    /**
+     * This function calls the getRandomCard function above with predetermined probabilities that simulate the
+     * regular HR guaranteed SR 10% ticket in the game.
+     *
+     * If the user supplies rarity probabilities, they will be overriden. Any other request parameters will
+     * be passed onto the random function normally.
+     *
+     * @param Request $request the request sent to the server
+     * @return mixed
+     */
+    public static function regularHRSRtenProbability(Request $request) {
+        // get the request parameters
+        $request->merge(['N_Probability' => 0]);
+        $request->merge(['HN_Probability' => 0]);
+        $request->merge(['R_Probability' => 0]);
+        $request->merge(['HR_Probability' => 0.899]);
+        $request->merge(['SR_Probability' => 0.1]);
+        $request->merge(['SSR_Probability' => 0.001]);
+        $request->merge(['UR_Probability' => 0]);
+        return RandomController::getRandomCard($request);
+    }
+
 }

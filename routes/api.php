@@ -43,3 +43,5 @@ Route::get('/birthdays/today/picture', 'BirthdayController@getBirthdaysTodayPict
 Route::get('/birthdays/today/card', 'BirthdayController@getBirthdaysTodayCard');
 
 Route::get('/random/card', 'RandomController@getRandomCard');
+Route::get('/random/card/regular', 'RandomController@regularPlatinumProbability');
+Route::get('/random/card/hrsr10', 'RandomController@regularHRSRtenProbability');
