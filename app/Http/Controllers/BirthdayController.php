@@ -132,7 +132,7 @@ class BirthdayController extends Controller
      */
     public function getBirthdaysTodayCard(Request $request) {
         date_default_timezone_set('Asia/Tokyo');
-        $date = date('2015-01-31');
+        $date = date('2015-m-d');
         $girls = Girl::whereDate('girl_birthday_date', '=', $date)->get();
         $girl = null;
 
